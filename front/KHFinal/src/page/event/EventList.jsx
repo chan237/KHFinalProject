@@ -1,10 +1,17 @@
 import { Header, Footer } from '../../components';
+import EventListVisualWrap from './component/EventListVisualWrap';
+import EventListSearchWrap from './component/EventListSearchWrap';
+import EventListViewWrap from './component/EventListVIewWrap';
 
 const EventList = () => {
   return (
     <>
       <Header page="list" />
-      <h1>EventList</h1>
+      <br />
+      <EventListSearchWrap />
+      <br />
+      <EventListVisualWrap />
+      <EventListViewWrap />
       <Footer />
     </>
   );

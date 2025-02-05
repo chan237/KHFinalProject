@@ -1,18 +1,6 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
-import {
-  AdminCarousel,
-  AdminEventPermit,
-  AdminMain,
-  AdminManagerInsert,
-  AdminManagerList,
-  AdminNoticeInsert,
-  AdminNoticeList,
-  AdminNoticeModify,
-  AdminNoticeRead,
-  AdminStats,
-  AdminUserManage,
-} from './page/admin';
+import RouterComponentAdmin from './RouterComponentAdmin';
 import { ProtectedRoute, Unauthorized } from './components';
 import { EventList, EventRead } from './page/event';
 import { EventCalendar } from './page/eventCalendar';
@@ -30,14 +18,14 @@ import {
 } from './page/qna';
 import {
   UserCart,
-  UserDelete,
   UserInsert,
   UserLoginPage,
   UserLoginSuccess,
   UserMypage,
   UserReservedList,
-  UserUpdate,
+  BookingList,
 } from './page/user';
+import NotFound from './page/common/NotFound';
 
 const RouterComponent = () => {
   const location = useLocation(); // ✅ 현재 경로 가져오기
@@ -72,44 +60,24 @@ const RouterComponent = () => {
       <Route path="/eventCalendar" element={<EventCalendar />} />
       <Route path="/eventMap" element={<EventMap />} />
       <Route path="/eventList" element={<EventList />} />
-      <Route path="/eventRead/:id" element={<EventRead />} />
+      <Route path="/eventRead/:no" element={<EventRead />} />
 
       {/* ✅ 공지사항 관련 */}
       <Route path="/noticeList" element={<NoticeList />} />
-      <Route path="/noticeRead/:id" element={<NoticeRead />} />
+      <Route path="/noticeRead/:no" element={<NoticeRead />} />
 
       {/* ✅ QnA 관련 */}
       <Route path="/qnaList" element={<QnaList />} />
       <Route path="/qnaInsert" element={<QnaInsert />} />
-      <Route path="/qnaModify/:id" element={<QnaModify />} />
-      <Route path="/qnaRead/:id" element={<QnaRead />} />
-      <Route path="/qnaReInsert/:id" element={<QnaReInsert />} />
+      <Route path="/qnaModify/:no" element={<QnaModify />} />
+      <Route path="/qnaRead/:no" element={<QnaRead />} />
+      <Route path="/qnaReInsert/:no" element={<QnaReInsert />} />
 
       {/* ✅ 권한 없을 때 */}
       <Route path="/unauthorized" element={<Unauthorized />} />
 
       {/* ✅ 관리자 페이지 */}
-      <Route
-        path="/admin/*"
-        element={
-          <ProtectedRoute requiredRole={0} endpoint="jwtAdmin">
-            <AdminLayout />
-          </ProtectedRoute>
-        }
-      >
-        <Route path="adminStats" element={<AdminStats />} />
-        <Route path="adminCarousel" element={<AdminCarousel />} />
-        <Route path="adminEventPermit" element={<AdminEventPermit />} />
-        <Route path="adminManagerInsert" element={<AdminManagerInsert />} />
-        <Route path="adminManagerList" element={<AdminManagerList />} />
-        <Route path="adminNoticeInsert" element={<AdminNoticeInsert />} />
-        <Route path="adminNoticeList" element={<AdminNoticeList />} />
-        <Route path="adminNoticeModify/:id" element={<AdminNoticeModify />} />
-        <Route path="adminNoticeRead/:id" element={<AdminNoticeRead />} />
-        <Route path="adminUserManage" element={<AdminUserManage />} />
-        <Route path="adminMain" element={<AdminMain />} />
-      </Route>
-
+      <Route path="/admin/*" element={<RouterComponentAdmin />} />
       {/* ✅ 매니저 페이지 */}
       <Route
         path="/manager/*"
@@ -122,6 +90,7 @@ const RouterComponent = () => {
         <Route path="managerMain" element={<ManagerMain />} />
         <Route path="managerEventInsert" element={<ManagerEventInsert />} />
         <Route path="managerStats" element={<ManagerStats />} />
+        <Route path="*" element={<NotFound />} />
       </Route>
 
       {/* ✅ 유저 페이지 */}
@@ -136,9 +105,11 @@ const RouterComponent = () => {
         <Route path="userCart" element={<UserCart />} />
         <Route path="userMypage" element={<UserMypage />} />
         <Route path="userReservedList" element={<UserReservedList />} />
-        <Route path="userUpdate" element={<UserUpdate />} />
-        <Route path="UserDelete" element={<UserDelete />} />
+        <Route path="BookingList" element={<BookingList />} />
+        <Route path="*" element={<NotFound />} />
       </Route>
+      {/* 🚨 존재하지 않는 /user/* 내부 URL이면 404 페이지로 이동 */}
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };
