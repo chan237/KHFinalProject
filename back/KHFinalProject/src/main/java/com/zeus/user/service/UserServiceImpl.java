@@ -11,11 +11,11 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zeus.common.config.JwtUtil;
 import com.zeus.user.domain.User;
 import com.zeus.user.mapper.UserMapper;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -23,7 +23,10 @@ import lombok.extern.slf4j.Slf4j;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper mapper;
-
+    
+    @Autowired
+    private JwtUtil JwtUtil;
+    
     @Value("${naver.client-id}")
     private String naverClientId;
 
@@ -53,6 +56,8 @@ public class UserServiceImpl implements UserService {
     public User getUserByIdAndProvider(User user) {
         return mapper.findUserByIdAndProvider(user);
     }
+    
+    
     @Override
     public boolean insert(User user) {
         try {
@@ -64,10 +69,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean checkRegist(User user) {
+    public User checkRegist(User user) {
         try {
-            int count = mapper.checkRegist(user);
-            return count == 0; // 중복이 없으면 true 등록이 안되어있다면 true
+        	User userCheck= mapper.findUserByIdAndProvider(user);
+            return userCheck; // 중복됐으면 false 중복이 아니며true
+        } catch (Exception e) {
+            log.error("User CheckRegist Error: {}", e.getMessage());
+            throw new RuntimeException("중복 체크 실패", e);
+        }
+    }
+    
+    @Override
+    public User checkLogin(User user) {
+        try {
+        	User userLogin= mapper.checkLogin(user);
+            return userLogin; // 중복됐으면 false 중복이 아니면true
         } catch (Exception e) {
             log.error("User CheckRegist Error: {}", e.getMessage());
             throw new RuntimeException("중복 체크 실패", e);
@@ -81,11 +97,7 @@ public class UserServiceImpl implements UserService {
     public User getUserByAccessToken(String accessToken) {
         try {
             // JWT 토큰 검증
-            Claims claims = Jwts.parser()
-                    .setSigningKey(secretKey) // JWT 서명 검증을 위한 시크릿 키
-                    .parseClaimsJws(accessToken)
-                    .getBody();
-
+            Claims claims = JwtUtil.validateToken(accessToken);
             // 토큰에서 사용자 정보 추출
             String userId = claims.get("id", String.class);
             String provider = claims.get("provider", String.class);
@@ -183,6 +195,44 @@ public class UserServiceImpl implements UserService {
 
         return response.getBody();
     }
+
+    //이메일로 아이디 찾기 기능을 위해 일반 유저 정보를 가져온다. 보안을 위해 아이디만 살려서 보낼것
+	@Override
+	public User findCommonUserByEmail(User user) {
+		if(mapper.findUserByEmail(user)==null) {
+			return null;
+		}
+		User idOnlyUser = new User();
+		idOnlyUser.setId(mapper.findUserByEmail(user).getId());
+		return idOnlyUser;
+	}
+
+	//이메일, 아이디로 비밀번호 찾기 기능을 위해 일반 유저 정보를 가져온다.
+	@Override
+	public User findCommonUserByEmailAndId(User user) {
+		if(mapper.findUserByEmailAndId(user)==null) {
+			return null;
+		}
+		User chekckUser = new User();
+		return chekckUser;
+	}
+
+	//아이디, 프로바이더, 임시비밀번호를 받아 db를 임시비밀번호로 업데이트
+	@Override
+	public boolean updateRandomPwdById(User user) {
+		boolean flag=mapper.updateRandomPwdById(user);
+		return flag;
+	}
+
+	//닉네임을 받아서 DB에서 중복확인
+	@Override
+	public User checkNickName(User user) {
+		if(mapper.checkNickName(user)==null) {
+			return null;
+		}
+		User chekckUser = new User();
+		return chekckUser;
+	}
 
 
 }

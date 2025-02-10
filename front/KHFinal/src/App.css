@@ -10,7 +10,7 @@ body {
 /* ✅ 네비게이션 폰트 */
 .navbar {
   font-family: 'Pretendard', sans-serif;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 600;
 }
 
@@ -70,6 +70,20 @@ a {
 .dark-mode-hover:hover {
   background: white;
   color: #333;
+}
+
+/* ✅ 라이트 모드 스타일 div용*/
+.light-mode.div {
+  color: #333;
+  background-color: white;
+  border-color: #333;
+}
+
+/* ✅ 다크 모드 스타일 div용*/
+.dark-mode.div {
+  color: white;
+  background-color: #181818;
+  border-color: white;
 }
 
 /* ✅ 라이트 모드 글자 스타일 */
@@ -221,4 +235,71 @@ a {
 .light-mode.custom-pagination .page-item .page-link:hover {
   background-color: #666 !important; /* 마우스 오버 시 - 어두운 회색 */
   color: white !important;
+}
+html {
+  scroll-behavior: auto !important;
+}
+
+button.dark-mode-hover {
+  background-color: white;
+  color: #333;
+}
+
+button.light-mode-hover {
+  background-color: #333;
+  color: white;
+}
+button.light-mode-hover:hover {
+  background-color: #616161;
+  color: white;
+  border-color: #9c9c9c;
+}
+
+button.dark-mode-hover:hover {
+  background-color: #333;
+  color: white;
+  border-color: white;
+}
+
+.ButtonGroup.dark-mode-hover {
+  background-color: #333;
+  color: white;
+}
+
+.ButtonGroup.light-mode-hover {
+  background-color: white;
+  color: #333;
+}
+.ButtonGroup.light-mode-hover:hover {
+  background-color: #e0e0e0;
+  color: black;
+}
+
+.ButtonGroup.dark-mode-hover:hover {
+  background-color: #616161;
+  color: white;
+  border-color: #9c9c9c;
+}
+.form-container.dark-mode {
+  background-color: #333;
+  color: white;
+  box-shadow: 0 4px 8px rgba(233, 233, 233, 0.1);
+}
+
+.form-container.light-mode {
+  background-color: white;
+  color: #333;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+/* ✅ 모달 다크/라이트 모드 */
+.modal.dark-mode .modal-content {
+  background-color: #333;
+  color: white;
+  border: 1px solid #555;
+}
+
+.modal.light-mode .modal-content {
+  background-color: white;
+  color: #333;
+  border: 1px solid #ddd;
 }

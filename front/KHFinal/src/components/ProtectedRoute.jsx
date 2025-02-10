@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 
 const ProtectedRoute = ({ children, endpoint }) => {
-  // const [isAuthorized, setIsAuthorized] = useState(null); // ✅ 권한 여부 상태
-  // const [isLoading, setIsLoading] = useState(true); // ✅ 로딩 상태
+  const [isAuthorized, setIsAuthorized] = useState(null); // ✅ 권한 여부 상태
+  const [isLoading, setIsLoading] = useState(true); // ✅ 로딩 상태
 
   // useEffect(() => {
   //   // ✅ 서버에 로그인 상태 및 접근 권한 확인 요청 (JWT는 쿠키에서 자동 전송됨)

@@ -1,19 +1,18 @@
 import React from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
-import { createContext, useState } from 'react';
-import NotFound from './page/common/NotFound';
-import RouterComponent from './RouterComponent';
+import { RouterProvider } from 'react-router-dom';
 import { Provider } from './Context';
+import root from './Routes/root';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
+import { Chart, registerables } from 'chart.js';
+
+Chart.register(...registerables);
 
 function App() {
   return (
-    <BrowserRouter>
-      <Provider>
-        <RouterComponent />
-      </Provider>
-    </BrowserRouter>
+    <Provider>
+      <RouterProvider router={root} />
+    </Provider>
   );
 }
 

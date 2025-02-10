@@ -1,0 +1,63 @@
+/* 📌 전체 컨테이너 */
+
+/* 📌 메인 이미지 스타일 */
+.EventReadTitle-main-image {
+  width: 100%;
+  max-height: 400px;
+  border-radius: 10px;
+}
+
+/* 📌 서브 이미지 컨테이너 (가로 한 줄 정렬) */
+.EventReadTitle-sub-container {
+  display: flex;
+  gap: 10px;
+}
+
+/* 📌 서브 이미지 (가로 한 줄) */
+.EventReadTitle-sub-image {
+  width: 120px;
+  height: 80px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.EventReadTitle-sub-image:hover {
+  transform: scale(1.1);
+}
+
+/* 📌 축제 정보 */
+.EventReadTitle-title {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.EventReadTitle-price {
+  font-size: 1.2rem;
+  margin: 10px 0;
+}
+
+/* 📌 티켓 수량 선택 */
+.EventReadTitle-ticket-btn {
+  font-size: 1rem;
+  padding: 8px 15px;
+}
+
+.EventReadTitle-ticket-count {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* ✅ 메인 이미지 변경 시 fade-in 애니메이션 */
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

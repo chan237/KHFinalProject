@@ -4,10 +4,15 @@ import com.zeus.user.domain.User;
 
 public interface UserService {
 	//유저 기능
-	User getUserByIdAndProvider(User user);//로그인 확인
-	boolean checkRegist(User user);
+	User getUserByIdAndProvider(User user);//아이디 ,provider로 유저정보 가져오
+	User checkRegist(User user);
+	User checkLogin(User user);
+	User checkNickName(User user);
 	boolean insert(User user);
 	public User getUserByAccessToken(String accessToken);
+	User findCommonUserByEmail(User user);
+	User findCommonUserByEmailAndId(User user);
+	boolean updateRandomPwdById(User user);
     // 네이버 로그인
     String getNaverAuthUrl(); // 네이버 로그인 인증 URL 생성
     String getNaverAccessToken(String code, String state); // 네이버 Access Token 요청

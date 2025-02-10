@@ -1,13 +1,22 @@
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ApiLogin from './components/ApiLogin';
 import { checkAuthStatus } from './userApi.js'; // ✅ 로그인 상태 확인 API 호출
-
+import { Context } from '../../Context';
+import { Button, Form, Modal, Nav } from 'react-bootstrap';
+import './css/UserLoginPage.css';
+import UserFind from './UserFind';
 const UserLoginPage = () => {
+  const { getDarkMode, getDarkModeHover, darkMode } = useContext(Context);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
+  const [showFindModal, setShowFindModal] = useState(false);
+  const [modalContent, setModalContent] = useState('');
 
   useEffect(() => {
     checkAuthStatus()
@@ -20,6 +29,23 @@ const UserLoginPage = () => {
       .finally(() => setIsLoading(false)); // ✅ 로딩 완료
   }, [navigate]);
 
+  // 모달 열기
+  const handleShow = (type) => {
+    setModalContent(type);
+    setShowFindModal(true);
+  };
+
+  // 모달 닫기
+  const handleClose = () => setShowFindModal(false);
+
+  const handleLoginSubmit = (e) => {
+    e.preventDefault();
+    // 로그인 처리 로직
+    console.log('아이디:', email);
+    console.log('비밀번호:', password);
+    console.log('로그인 상태 유지:', rememberMe);
+  };
+
   if (isLoading) {
     return <div>로딩 중...</div>;
   }
@@ -27,8 +53,115 @@ const UserLoginPage = () => {
   return (
     <>
       <Header />
-      <h1>UserLoginPage</h1>
-      <ApiLogin />
+
+      {/* 로그인 폼 */}
+      <div
+        className={`UserLoginPage-form-container p-5 ${getDarkMode()} form-container`}
+      >
+        <Form onSubmit={handleLoginSubmit}>
+          {/* 아이디 입력 */}
+          <Form.Floating className="mb-3">
+            <Form.Control
+              id="email"
+              type="email"
+              placeholder="이메일을 입력하세요"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <Form.Label htmlFor="email">아이디</Form.Label>
+          </Form.Floating>
+
+          {/* 비밀번호 입력 */}
+          <Form.Floating className="mb-3">
+            <Form.Control
+              id="password"
+              type="password"
+              placeholder="비밀번호를 입력하세요"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Form.Label htmlFor="password">비밀번호</Form.Label>
+          </Form.Floating>
+
+          {/* 로그인 상태 유지 체크박스 */}
+          <Form.Check
+            type="checkbox"
+            id="rememberMe"
+            label="로그인 상태 유지"
+            checked={rememberMe}
+            onChange={(e) => setRememberMe(e.target.checked)}
+            className="mb-3"
+          />
+
+          {/* 로그인 버튼 */}
+          <div className="UserLoginPage-button-container">
+            <Button
+              variant="none"
+              className={`${getDarkModeHover()} w-100`}
+              type="submit"
+            >
+              로그인
+            </Button>
+          </div>
+
+         {/* 아이디 찾기, 비밀번호 찾기, 회원가입 링크 추가 */}
+{/* 네비게이션 바 */}
+<div className="text-center mt-3">
+  <Nav className="justify-content-center align-items-center">
+    <Nav.Item>
+      <Nav.Link
+        onClick={() => handleShow('아이디 찾기')}
+        className={`mx-2 UserLoginPage-nav-link-hover ${darkMode ? 'text-light dark-mode' : 'text-dark'}`}
+      >
+        아이디 찾기
+      </Nav.Link>
+    </Nav.Item>
+    <span>|</span>
+    <Nav.Item>
+      <Nav.Link
+        onClick={() => handleShow('비밀번호 찾기')}
+        className={`mx-2 UserLoginPage-nav-link-hover ${darkMode ? 'text-light dark-mode' : 'text-dark'}`}
+      >
+        비밀번호 찾기
+      </Nav.Link>
+    </Nav.Item>
+    <span>|</span>
+    <Nav.Item>
+      <Nav.Link
+        onClick={() => navigate('/userInsertCommon')}
+        className={`mx-2 UserLoginPage-nav-link-hover ${darkMode ? 'text-light dark-mode' : 'text-dark'}`}
+      >
+        회원가입
+      </Nav.Link>
+    </Nav.Item>
+  </Nav>
+</div>
+
+        </Form>
+
+        {/* 외부 API 로그인 */}
+        <div className="UserLoginPage-api-container">
+          <ApiLogin /> {/* 외부 API 로그인 컴포넌트 */}
+        </div>
+      </div>
+      {/* 모달 (팝업창) */}
+      <Modal
+        show={showFindModal}
+        onHide={handleClose}
+        centered
+        className={`${getDarkMode()}`}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>{modalContent}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {modalContent === '아이디 찾기' ? (
+            <UserFind type="id" />
+          ) : (
+            <UserFind type="pwd" />
+          )}
+        </Modal.Body>
+      </Modal>
       <Footer />
     </>
   );
